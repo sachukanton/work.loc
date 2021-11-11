@@ -1,0 +1,90 @@
+/* -------------------------------------------------
+    Datepicker
+   ------------------------------------------------- */
+
+.datepickers-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    @media print {
+        display: none;
+    }
+}
+
+.datepicker {
+    @extend .uk-border-rounded;
+    @extend .uk-box-shadow-small;
+    box-sizing: content-box;
+    font-family: $datepickerFontFamily, sans-serif;
+    font-size: $global-small-font-size;
+    background: $dropdown-background;
+    color: $dropdown-color;
+    width: $datepickerWidth;
+    position: absolute;
+    left: -100000px;
+    opacity: 0;
+    //transition: opacity $datepickerTransitionSpeed $datepickerTransitionEase, transform $datepickerTransitionSpeed $datepickerTransitionEase, left 0s $datepickerTransitionSpeed;
+    z-index: $datepickerZIndex;
+
+    //&.-from-top- {
+    //    transform: translateY(-$datepickerTransitionOffset);
+    //}
+    //&.-from-right- {
+    //    transform: translateX($datepickerTransitionOffset);
+    //}
+    //&.-from-bottom- {
+    //    transform: translateY($datepickerTransitionOffset);
+    //}
+    //&.-from-left- {
+    //    transform: translateX(-$datepickerTransitionOffset);
+    //}
+
+    &.active {
+        opacity: 1;
+        transform: translate(0);
+        transition: opacity $datepickerTransitionSpeed $datepickerTransitionEase;
+    }
+}
+
+.datepicker-inline {
+    .datepicker {
+        border: $global-border-width $global-border solid;
+        box-shadow: none;
+        position: static;
+        left: auto;
+        right: auto;
+        opacity: 1;
+        transform: none;
+        width: 100%;
+    }
+
+}
+
+.datepicker--content {
+    box-sizing: content-box;
+    padding: $datepickerPadding;
+
+    .-only-timepicker- & {
+        display: none;
+    }
+}
+
+//  Pointer
+// -------------------------------------------------
+$pointerHalfSize: $datepickerPointerSize / 2 - 1;
+
+.datepicker--pointer {
+    display: none;
+}
+
+//  Body
+// -------------------------------------------------
+
+.datepicker--body {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}

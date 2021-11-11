@@ -1,0 +1,16 @@
+.uk-rateStars .uk-icon {
+    cursor: pointer;
+    color: #eee;
+}
+
+.uk-rateStars .uk-icon.star-after {
+    color: #e0e0e0 !important;
+}
+
+.uk-rateStars .uk-icon.star-before {
+    color: #ffb300 !important;
+}
+
+.uk-rateStars .uk-icon.star-checked:not(.star-before):not(.star-after) {
+    color: #ffa000 !important;
+}

@@ -1,0 +1,131 @@
+[29-Sep-2021 01:00:17 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'puccomua_laravel.display_rules' doesn't exist in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php(112): PDOStatement->execute(NULL)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(330): Doctrine\DBAL\Driver\PDOStatement->execute()
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(657): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from `...', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(624): Illuminate\Database\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connect in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[29-Sep-2021 01:00:27 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'puccomua_laravel.display_rules' doesn't exist in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php(112): PDOStatement->execute(NULL)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(330): Doctrine\DBAL\Driver\PDOStatement->execute()
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(657): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from `...', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(624): Illuminate\Database\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connect in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[29-Sep-2021 01:00:45 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 01:00:59 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'puccomua_laravel.display_rules' doesn't exist in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php(112): PDOStatement->execute(NULL)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(330): Doctrine\DBAL\Driver\PDOStatement->execute()
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(657): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from `...', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(624): Illuminate\Database\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connect in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[29-Sep-2021 01:01:14 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 01:01:18 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'puccomua_laravel.display_rules' doesn't exist in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php(112): PDOStatement->execute(NULL)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(330): Doctrine\DBAL\Driver\PDOStatement->execute()
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(657): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from `...', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(624): Illuminate\Database\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connect in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[29-Sep-2021 01:04:26 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 01:05:55 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'puccomua_laravel.display_rules' doesn't exist in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php(112): PDOStatement->execute(NULL)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(330): Doctrine\DBAL\Driver\PDOStatement->execute()
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(657): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from `...', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php(624): Illuminate\Database\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connect in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[29-Sep-2021 01:06:36 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 01:08:01 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 11:13:27 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 11:18:03 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 11:18:11 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 11:18:17 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 11:18:52 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 435126272 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 12:11:07 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 12:11:51 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[29-Sep-2021 12:12:03 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[30-Sep-2021 14:53:46 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[01-Oct-2021 21:13:31 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[04-Oct-2021 10:22:17 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[04-Oct-2021 10:22:23 Europe/Kiev] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 812847104 bytes) in /home/puccomua/domains/puc.com.ua/storage/framework/views/e3e00b329b64bf56f4d54e9e625c004261e72856.php on line 92
+[04-Oct-2021 10:59:48 Europe/Kiev] PHP Fatal error:  Uncaught ErrorException: Undefined variable: delimiter in /home/puccomua/domains/puc.com.ua/app/Helpers/Base.php:502
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/app/Helpers/Base.php(502): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined varia...', '/home/puccomua/...', 502, Array)
+#1 /home/puccomua/domains/puc.com.ua/app/Helpers/Load.php(37): format_phone_number('+38 (066) 36 53...')
+#2 /home/puccomua/domains/puc.com.ua/app/Library/Wrap.php(136): contacts_load('ru')
+#3 /home/puccomua/domains/puc.com.ua/app/Exceptions/Handler.php(38): App\Library\Wrap->_load(Object(Illuminate\Http\Request))
+#4 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(123): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#5 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(100): Illuminate\Foundation\Bootstrap\HandleExceptions->render in /home/puccomua/domains/puc.com.ua/app/Helpers/Base.php on line 502
+[06-Oct-2021 17:31:03 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[06-Oct-2021 17:31:14 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[18-Oct-2021 16:16:53 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[18-Oct-2021 16:16:53 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:14 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:14 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:23 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:23 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:23 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:32 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664
+[21-Oct-2021 12:26:32 Europe/Kiev] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1203] User puccomua_laravel_usr already has more than 'max_user_connections' active connections in /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php:39
+Stack trace:
+#0 /home/puccomua/domains/puc.com.ua/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOConnection.php(39): PDO->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#1 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(67): Doctrine\DBAL\Driver\PDOConnection->__construct('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#2 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\Database\Connectors\Connector->createPdoConnection('mysql:host=127....', 'puccomua_larave...', 'usX@s52VOB6N', Array)
+#3 /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlCon in /home/puccomua/domains/puc.com.ua/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 664

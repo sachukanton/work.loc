@@ -1,0 +1,52 @@
+tbody tr {
+    border-color: #fff;
+    &.order-status-0 {
+        background: #f2f2f2;
+        color: #48535a;
+        a:not(.uk-button) {
+            color: #48535a;
+        }
+    }
+    &.order-status-1 {
+        background: #b3deff;
+        color: #0165b2;
+        a:not(.uk-button) {
+            color: #0165b2;
+        }
+    }
+    &.order-status-2 {
+        background: #caecde;
+        color: #308862;
+        a:not(.uk-button) {
+            color: #308862;
+        }
+    }
+    &.order-status-3 {
+        background: #ffe8e9;
+        color: #ff201c;
+        a:not(.uk-button) {
+            color: #ff201c;
+        }
+    }
+}
+
+#load-update-order-lists {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    display: none;
+    &.load {
+        display: block;
+    }
+    &:after {
+        content: '';
+        display: block;
+        position: relative;
+        background: url('/images/loading-clock.gif') #fff 50% 50% no-repeat;
+        width: 100px;
+        height: 100px;
+        z-index: 1000;
+        @extend .uk-border-rounded;
+        @extend .uk-box-shadow-medium;
+    }
+}

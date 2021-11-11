@@ -1,0 +1,39 @@
+{
+  "name": "kolirt/laravel-frontpad",
+  "type": "library",
+  "description": "This package was created for frontpad.ru.",
+  "keywords": [
+    "laravel",
+    "laravel-frontpad",
+    "frontpad"
+  ],
+  "license": "MIT",
+  "version": "1.0.3",
+  "authors": [
+    {
+      "name": "Asan Abdurakhmanov",
+      "email": "asan11@outlook.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "> 6.0.0"
+  },
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "Kolirt\\Frontpad\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Kolirt\\Frontpad\\ServiceProvider"
+      ],
+      "aliases": {
+        "Frontpad": "Kolirt\\Frontpad\\Facade\\Frontpad"
+      }
+    }
+  }
+}

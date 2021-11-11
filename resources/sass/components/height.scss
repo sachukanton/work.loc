@@ -1,0 +1,116 @@
+// Name:            Height
+// Description:     Utilities for heights
+//
+// Component:       `uk-height-*`
+//
+// ========================================================================
+
+// Variables
+// ========================================================================
+
+/* ========================================================================
+   Component: Height
+ ========================================================================== */
+
+[class*='uk-height'] {
+    box-sizing: border-box;
+}
+
+/*
+ * Only works if parent element has a height set
+ */
+
+.uk-height-1-1 {
+    height: 100%;
+}
+
+/*
+ * Useful to create image teasers
+ */
+
+.uk-height-viewport {
+    min-height: 100vh;
+}
+
+/*
+ * Pixel
+ * Useful for `overflow: auto`
+ */
+
+.uk-height-xsmall {
+    height: $height-xsmall-height;
+}
+
+.uk-height-small {
+    height: $height-small-height;
+}
+
+.uk-height-medium {
+    height: $height-medium-height;
+}
+
+.uk-height-large {
+    height: $height-large-height;
+}
+
+.uk-height-max-xsmall {
+    max-height: $height-xsmall-height;
+}
+
+.uk-height-max-small {
+    max-height: $height-small-height;
+}
+
+.uk-height-max-medium {
+    max-height: $height-medium-height;
+}
+
+.uk-height-max-large {
+    max-height: $height-large-height;
+}
+
+.uk-height-min-xsmall {
+    min-height: $height-xsmall-height;
+}
+
+.uk-height-min-small {
+    min-height: $height-small-height;
+}
+
+.uk-height-min-medium {
+    min-height: $height-medium-height;
+}
+
+.uk-height-min-large {
+    min-height: $height-large-height;
+}
+
+@for $i from 1 through 10 {
+    $result: $i * 10;
+    .uk-height-#{$result} {
+        height: #{$result}px !important;
+    }
+    .uk-height-max-#{$result} {
+        max-height: #{$result}px !important;
+    }
+    .uk-height-min-#{$result} {
+        min-height: #{$result}px !important;
+    }
+}
+
+// Hooks
+// ========================================================================
+
+@if (mixin-exists(hook-height-misc)) {
+    @include hook-height-misc();
+}
+
+// @mixin hook-height-misc(){}
+
+.uk-height-min-vh {
+    min-height: 100vh;
+}
+
+.uk-height-max-vh {
+    max-height: 100vh;
+}

@@ -1,0 +1,131 @@
+// Color Classes
+
+@each $color_name, $color in $colors {
+    @each $color_type, $color_value in $color {
+        @if $color_type == "base" {
+            .uk-background-color-#{$color_name} {
+                background-color: $color_value !important;
+            }
+            .uk-background-color-hover-#{$color_name} {
+                &:hover,
+                &:focus {
+                    background-color: $color_value !important;
+                }
+            }
+            .uk-text-color-#{$color_name} {
+                color: $color_value !important;
+            }
+            .uk-border-color-#{$color_name} {
+                border-color: $color_value !important;
+            }
+            .uk-link-color-#{$color_name} {
+                color: $color_value !important;
+                &:hover,
+                &:focus {
+                    color: darken($color_value, 5%) !important;
+                }
+                &:active,
+                &.uk-active {
+                    color: darken($color_value, 10%) !important;
+                }
+                &:disabled {
+                    color: lighten($color_value, 20%) !important;
+                }
+            }
+            .uk-link-color-hover-#{$color_name} {
+                &:hover,
+                &:focus {
+                    color: $color_value !important;
+                }
+                &:disabled {
+                    color: lighten($color_value, 20%) !important;
+                }
+            }
+            .uk-button-color-#{$color_name} {
+                background-color: $color_value !important;
+                @if $color_name != "amber" and $color_name != "lime" {
+                    color: $global-inverse-color !important;
+                }
+                &:hover,
+                &:focus {
+                    background-color: darken($color_value, 5%) !important;
+                }
+                &:active,
+                &.uk-active {
+                    background-color: darken($color_value, 10%) !important;
+                }
+                &.uk-disabled,
+                &:disabled {
+                    background-color: lighten($color_value, 20%) !important;
+                    @if $color_name == "amber" or $color_name == "lime" {
+                        color: lighten($global-emphasis-color, 15%) !important;
+                    } @else {
+                        color: lighten($global-inverse-color, 15%) !important;
+                    }
+                }
+            }
+            .uk-button-color-hover-#{$color_name} {
+                &:hover,
+                &:focus {
+                    background-color: $color_value !important;
+                    @if $color_name == "amber" or $color_name == "lime" {
+                        color: lighten($global-emphasis-color, 15%) !important;
+                    } @else {
+                        color: lighten($global-inverse-color, 15%) !important;
+                    }
+                }
+                &:disabled {
+                    background-color: lighten($color_value, 20%) !important;
+                }
+            }
+        } @else if $color_name != "shades" {
+            .uk-background-color-#{$color_name}.#{$color_type} {
+                background-color: $color_value !important;
+            }
+            .uk-text-color-#{$color_name}.#{$color_type} {
+                color: $color_value !important;
+            }
+            .uk-border-color-#{$color_name}.#{$color_type} {
+                border-color: $color_value !important;
+            }
+        }
+    }
+}
+
+// Shade classes
+@each $color, $color_value in $shades {
+    .uk-background-color-#{$color} {
+        background-color: $color_value !important;
+    }
+    .uk-text-color-#{$color} {
+        color: $color_value !important;
+    }
+    .uk-border-color-#{$color} {
+        border-color: $color_value !important;
+    }
+    @if $color != "transparent" {
+        .uk-link-color-#{$color} {
+            color: $color_value !important;
+            &:hover,
+            &:focus {
+                color: darken($color_value, 5%) !important;
+            }
+            &:active,
+            &.uk-active {
+                color: darken($color_value, 10%) !important;
+            }
+            &:disabled {
+                color: lighten($color_value, 20%) !important;
+            }
+        }
+        .uk-link-color-hover-#{$color} {
+            &:hover,
+            &:focus {
+                color: $color_value !important;
+            }
+            &:disabled {
+                color: lighten($color_value, 20%) !important;
+            }
+        }
+    }
+}
