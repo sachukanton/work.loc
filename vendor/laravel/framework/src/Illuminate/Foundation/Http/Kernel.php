@@ -109,25 +109,27 @@ class Kernel implements KernelContract
      * @return \Illuminate\Http\Response
      */
     public function handle($request)
-    {
+    {   
         try {
             $request->enableHttpMethodParameterOverride();
-
             $response = $this->sendRequestThroughRouter($request);
-        } catch (Exception $e) {
+            
+        } catch (Exception $e) {echo"-21----";print_r($e);
             $this->reportException($e);
-
+            echo"-22----";
             $response = $this->renderException($request, $e);
-        } catch (Throwable $e) {
+            echo"-23----";
+        } catch (Throwable $e) {echo"-31----";
             $this->reportException($e = new FatalThrowableError($e));
-
+            echo"-32----";
             $response = $this->renderException($request, $e);
+            echo"-33----";
         }
-
+        echo"-2----";
         $this->app['events']->dispatch(
             new Events\RequestHandled($request, $response)
         );
-
+        echo"-3----";exit();
         return $response;
     }
 
