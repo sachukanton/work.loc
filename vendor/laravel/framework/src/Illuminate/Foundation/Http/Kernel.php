@@ -114,12 +114,10 @@ class Kernel implements KernelContract
             $request->enableHttpMethodParameterOverride();
 
             $response = $this->sendRequestThroughRouter($request);
-            
-        } catch (Exception $e) {echo"*22****";print_r($e);
+        } catch (Exception $e) {
             $this->reportException($e);
-            echo"*223****";
+
             $response = $this->renderException($request, $e);
-            echo"*12****";
         } catch (Throwable $e) {
             $this->reportException($e = new FatalThrowableError($e));
 
