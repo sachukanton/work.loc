@@ -16,7 +16,7 @@ class RegisterFacades
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   
         Facade::clearResolvedInstances();
 
         Facade::setFacadeApplication($app);

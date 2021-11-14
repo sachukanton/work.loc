@@ -33,7 +33,7 @@ class HandleExceptions
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   
         self::$reservedMemory = str_repeat('x', 10240);
 
         $this->app = $app;

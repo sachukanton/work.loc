@@ -47,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
 
     public function boot()
-    {
+    {    
         //            Route::domain('https://yummy-king.com.ua');
         Route::pattern('id', '[0-9]+');
         Route::pattern('key', '[0-9a-zA-Z]+');

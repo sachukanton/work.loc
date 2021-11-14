@@ -13,7 +13,7 @@ class RegisterProviders
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   
         $app->registerConfiguredProviders();
     }
 }

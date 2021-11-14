@@ -18,7 +18,7 @@ class LoadConfiguration
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   
         $items = [];
 
         // First we will see if we have a cache configuration file. If we do, we'll load

@@ -114,7 +114,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
      * Boots the current kernel.
      */
     public function boot()
-    {
+    {   
         if (true === $this->booted) {
             return;
         }

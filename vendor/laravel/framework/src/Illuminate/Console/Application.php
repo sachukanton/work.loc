@@ -144,7 +144,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      * @return void
      */
     protected function bootstrap()
-    {
+    {  
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
         }

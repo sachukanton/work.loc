@@ -13,7 +13,7 @@
         ];
 
         public function boot()
-        {
+        {   
             $this->registerPolicies();
         }
 
