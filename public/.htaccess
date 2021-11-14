@@ -1,43 +1,43 @@
-AuthUserFile /var/www/test09/data/www/test09.ukrmisto.com/.htpasswd
-Authtype Basic
-Authname "Secure OLEUS"
-Require valid-user
+#AuthUserFile /var/www/test09/data/www/test09.ukrmisto.com/.htpasswd
+#Authtype Basic
+#Authname "Secure OLEUS"
+#Require valid-user
 
 ### www to non www
-RewriteEngine On
-RewriteCond %{HTTP_HOST} ^www.puc.com.ua$ [NC]
-RewriteRule ^(.*)$ http://puc.com.ua/$1 [R=301,L]
+#RewriteEngine On
+#RewriteCond %{HTTP_HOST} ^www.puc.com.ua$ [NC]
+#RewriteRule ^(.*)$ http://puc.com.ua/$1 [R=301,L]
 
 
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
+#<IfModule mod_rewrite.c>
+#RewriteEngine On
+#RewriteCond %{HTTPS} off
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#</IfModule>
 
 
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+#<IfModule mod_rewrite.c>
+#    <IfModule mod_negotiation.c>
+#        Options -MultiViews -Indexes
+#    </IfModule>
 
-    RewriteEngine On
+#    RewriteEngine On
 
     # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+#    RewriteCond %{HTTP:Authorization} .
+#    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#    RewriteCond %{REQUEST_URI} (.+)/$
+#    RewriteRule ^ %1 [L,R=301]
 
     # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-</IfModule>
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#   RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteRule ^ index.php [L]
+#</IfModule>
 
 
 
