@@ -13,10 +13,11 @@ class IikoBizServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
+    {  // echo"77777===".__DIR__.'/../../config/iiko-biz.php'."\r\n";
         $this->publishes([
             __DIR__.'/../../config/iiko-biz.php' => config_path('iiko-biz.php'),
         ], 'config');
+        //echo"====888===\r\n";
     }
 
     /**

@@ -112,16 +112,17 @@ class Kernel implements KernelContract
     {
         try {
             $request->enableHttpMethodParameterOverride();
-
+           // echo"=2====";
             $response = $this->sendRequestThroughRouter($request);
-        } catch (Exception $e) {
-            $this->reportException($e);
-
-            $response = $this->renderException($request, $e);
-        } catch (Throwable $e) {
-            $this->reportException($e = new FatalThrowableError($e));
-
-            $response = $this->renderException($request, $e);
+           // echo"=3====";
+        } catch (Exception $e) {//echo"=4====";//print_r($e);
+            $this->reportException($e);//echo"=5====";
+           // echo"=6====";
+            $response = $this->renderException($request, $e);echo"=7====";
+        } catch (Throwable $e) {echo"=8====";
+            $this->reportException($e = new FatalThrowableError($e));echo"=9====";
+           // echo"=10====";
+            $response = $this->renderException($request, $e);echo"=11====";
         }
 
         $this->app['events']->dispatch(
@@ -140,11 +141,8 @@ class Kernel implements KernelContract
     protected function sendRequestThroughRouter($request)
     {
         $this->app->instance('request', $request);
-
         Facade::clearResolvedInstance('request');
-
         $this->bootstrap();
-
         return (new Pipeline($this->app))
                     ->send($request)
                     ->through($this->app->shouldSkipMiddleware() ? [] : $this->middleware)
@@ -157,10 +155,12 @@ class Kernel implements KernelContract
      * @return void
      */
     public function bootstrap()
-    {
+    {   //echo"==**==";
         if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
+            //echo"/////3333*****/////";
         }
+       // echo"/////44444****/////";
     }
 
     /**

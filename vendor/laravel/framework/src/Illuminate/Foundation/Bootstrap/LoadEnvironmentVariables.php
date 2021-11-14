@@ -21,7 +21,7 @@ class LoadEnvironmentVariables
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   //echo"111111111";
         if ($app->configurationIsCached()) {
             return;
         }

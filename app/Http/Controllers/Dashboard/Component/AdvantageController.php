@@ -16,6 +16,7 @@
         public function __construct()
         {
             parent::__construct();
+
             $this->middleware([
                 'permission:advantages_read'
             ]);
@@ -34,6 +35,7 @@
                 'delete' => 'advantages_delete',
             ];
             $this->entity = new Advantage();
+           
         }
 
         protected function _form($entity)

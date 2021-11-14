@@ -203,14 +203,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function bootstrapWith(array $bootstrappers)
     {
         $this->hasBeenBootstrapped = true;
-
+       // echo"-111-";
         foreach ($bootstrappers as $bootstrapper) {
             $this['events']->dispatch('bootstrapping: '.$bootstrapper, [$this]);
-
+           // echo"-333-"; print_r($bootstrapper); // Illuminate\Foundation\Bootstrap\BootProviders
             $this->make($bootstrapper)->bootstrap($this);
-
+            //echo"-444-";
             $this['events']->dispatch('bootstrapped: '.$bootstrapper, [$this]);
+            //echo"-555-";
         }
+       // echo"-666-";
     }
 
     /**
@@ -763,8 +765,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         if ($this->isDeferredService($abstract) && ! isset($this->instances[$abstract])) {
             $this->loadDeferredProvider($abstract);
         }
-
-        return parent::make($abstract, $parameters);
+          return parent::make($abstract, $parameters);
     }
 
     /**

@@ -151,7 +151,7 @@ abstract class ServiceProvider
      * @return void
      */
     protected function publishes(array $paths, $groups = null)
-    {
+    {   //echo"\r\n--publishes------";
         $this->ensurePublishArrayInitialized($class = static::class);
 
         static::$publishes[$class] = array_merge(static::$publishes[$class], $paths);
@@ -159,6 +159,7 @@ abstract class ServiceProvider
         foreach ((array) $groups as $group) {
             $this->addPublishGroup($group, $paths);
         }
+        //echo"\r\n********";
     }
 
     /**

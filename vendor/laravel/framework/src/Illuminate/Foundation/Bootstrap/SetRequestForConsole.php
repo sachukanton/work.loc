@@ -14,7 +14,7 @@ class SetRequestForConsole
      * @return void
      */
     public function bootstrap(Application $app)
-    {
+    {   echh"111111111";
         $uri = $app->make('config')->get('app.url', 'http://localhost');
 
         $components = parse_url($uri);
