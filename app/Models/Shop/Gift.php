@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\Shop;
 
 use App\Library\BaseModel;
@@ -30,6 +29,7 @@ class Gift extends BaseModel
         return $this->hasOne(Product::class, 'id', 'product_id')
             ->withDefault();
     }
+
 
     public static function getInfo()
     {
