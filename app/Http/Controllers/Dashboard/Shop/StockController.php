@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Dashboard\Shop;
 
 use App\Library\BaseController;
 use App\Models\Seo\UrlAlias;
-
+use App\Models\Shop\Category;
+//use Illuminate\Database\Eloquent\Collection;
 //use App\Models\Shop\Brand;
 //use App\Models\Shop\Gift;
-//use App\Models\Shop\Product;
+use App\Models\Shop\Product;
 
 use App\Models\Shop\Stock;
 
@@ -47,6 +48,7 @@ class StockController extends BaseController
          ];
 
         $this->entity = new Stock();
+
     }
 
 
@@ -67,6 +69,24 @@ class StockController extends BaseController
         $_form->permission = array_merge($_form->permission, $this->permissions);
         $_field_name = NULL;
 
+        /** Selection of product categories */
+        $_categories = Category::tree_parents();
+        if ($_categories->isNotEmpty()) {
+            $_categories = $_categories->map(function ($_item) {
+                return $_item['title_option'];
+            });
+        }
+        $_categories->prepend('-- Выбрать --', '');
+
+        if(!empty($entity->details)){
+            $entity->discount   = json_decode($entity->details)->discount ?? 0;
+            $entity->categories = json_decode($entity->details)->categories ?? 0;
+            $entity->products   = json_decode($entity->details)->products ?? 0;
+        }
+
+        $_products = [];
+        if(!empty($entity->categories))  $_products = Stock::_getProducts($entity->categories);
+
         $_form->tabs = [
             [
                 'title'   => 'Основные параметры',
@@ -85,6 +105,12 @@ class StockController extends BaseController
                         ],
                     ]),
                     '</div><div class="uk-width-1-2">',
+                    field_render('type', [
+                        'type'     => 'radio',
+                        'class'      => 'stock_type',
+                        'selected' => $entity->exists ? $entity->type : 0,
+                        'values'   => Stock::type()
+                    ]),
                     '</div></div>',
                     '<hr class="uk-divider-icon">',
                     '<div class="uk-grid"><div class="uk-width-1-2">',
@@ -107,11 +133,39 @@ class StockController extends BaseController
                         ],
                     ]),
                     '</div><div class="uk-width-1-2">',
-                    field_render('type', [
-                        'type'     => 'radio',
-                        'selected' => $entity->exists ? $entity->type : 0,
-                        'values'   => Stock::type()
+                   
+                    field_render('categories', [
+                        'type'     => 'select',
+                        'label'      => 'Доступные категории',
+                        'class'      => 'uk-select2 stock_categories',
+                        'required'   => TRUE,
+                        'selected' => $entity->categories,
+                        'values'   => $_categories,
+                        'options' => 'data-minimum-results-for-search="5"'
                     ]),
+                    field_render('products', [
+                        'type'     => 'select',
+                        'label'      => 'Продукция',
+                        'class'      => 'uk-select2 stock_products',
+                        'required'   => TRUE,
+                        'selected' => $entity->products,
+                        'values'   => $_products,
+                        'options' => 'data-minimum-results-for-search="5"'
+                    ]),
+
+                    field_render('discount', [
+                        'label'      => 'Скидка, %',
+                        'class'      => 'stock_discount',
+                        'type'       => 'number',
+                        'required'   => TRUE,
+                        'value'      => $entity->discount,
+                        'attributes' => [
+                            'autofocus' => TRUE,
+                            'min'  => 0,
+                            'max'  => 100
+                        ],
+                    ]),
+
                     '</div></div>',
                     '<hr class="uk-divider-icon">',
                     '<div class="uk-grid"><div class="uk-width-1-2">',
@@ -123,55 +177,6 @@ class StockController extends BaseController
                             1 => 'Активна'
                         ]
                     ]),
-
-                  
-                   
-
- /* field_render('preview_fid', [
-                        'type'     => 'file',
-                        'label'    => 'Изображение подарка',
-                        'allow'    => 'jpg|jpeg|gif|png',
-                        'values'   => $entity->exists && $entity->_preview ? [$entity->_preview] : NULL,
-                        'help'     => 'Рекомендуемый размер изображения 150px/130px',
-                        'required' => TRUE,
-                    ]),*/
-                    /*field_render('amount', [
-                        'label'      => 'Необходимая сумма',
-                        'type'       => 'number',
-                        'attributes' => [
-                            'step' => 1,
-                            'min'  => 0
-                        ],
-                        'required'   => TRUE,
-                        'value'      => $entity->amount
-                    ]),*/
-               
-                   /* field_render('product', [
-                        'type'       => 'autocomplete',
-                        'label'      => 'Товар',
-                        'value'      => $entity->exists && $entity->_product->exists ? $entity->_product->id : NULL,
-                        'selected'   => $entity->exists && $entity->_product->exists ? $entity->_product->title : NULL,
-                        'class'      => 'uk-autocomplete',
-                        'attributes' => [
-                            'data-url'   => _r('oleus.shop_gifts.product'),
-                            'data-value' => 'name'
-                        ],
-                        'help'       => 'Начните вводить название товара, который будет представлен как подарок.'
-                    ]),*/
-
-                   /* field_render('sort', [
-                        'type'  => 'number',
-                        'label' => 'Порядок сортировки',
-                        'value' => $entity->exists ? $entity->sort : 0,
-
-                    ]),*/
-                    /*field_render('status', [
-                        'type'     => 'checkbox',
-                        'selected' => $entity->exists ? $entity->status : 1,
-                        'values'   => [
-                            1 => 'Опубликовано'
-                        ]
-                    ])*/
                 ],
             ],
         ];
@@ -182,29 +187,16 @@ class StockController extends BaseController
 
     protected function _items($_wrap)
     {
-
-       // print_r($_wrap);
-       // exit();
-
-        $this->__filter();
-        $_filter = $this->filter;
-        if ($this->filter_clear) {
-            return redirect()
-                ->route("oleus.{$this->base_route}");
-        }
-        $_filters = [];
         $_items = collect([]);
 
         $_user = Auth::user();
 
-        $_query = Stock::orderByDesc('date_to')
+        $_query = Stock::orderByDesc('id')
         ->distinct()
         ->select([
             '*'
         ])
         ->paginate($this->entity->getPerPage(), ['id']);
-
-       
 
    /*
         $iiko = new IikoClient(config('iiko-biz'));
@@ -266,17 +258,28 @@ class StockController extends BaseController
         }
         if ($_query->isNotEmpty()) {
 
-//            print_r(Stock::type('all_busket'));
-          //  exit();
-
             $_items = $_query->map(function ($_item) use ($_user) {
+
+                $detail = json_decode($_item->details);
+                $detail_="";
+
+                $detail_.=!empty($detail_) ? "<br>":"";
+                $detail_.=!empty($detail->categories) ? "Категория: ".Category::where('id', $detail->categories)->pluck('title')[0]:"";
+
+                $detail_.=!empty($detail_)&&!empty($detail->products) ? "<br>":"";
+                $detail_.=!empty($detail->products) ? "Продукция: ".Product::where('id', $detail->products)->pluck('title')[0]:"";
+
+                $detail_.=!empty($detail_) ? "<br>":"";
+                $detail_.=!empty($detail->discount) ? "Скидка: ".$detail->discount."%":"";
+
+                //echo"---".Category::where('id', $detail->categories)->pluck('title');
+
                 $_response = [
                    "<div class='uk-text-center uk-text-bold'>{$_item->id}</div>",
                    $_item->title,
                    $_item->code,
                    Stock::type($_item->type),
-                   
-                   $_item->details,
+                   $detail_,
                    $_item->date_to,              
                    $_item->status ? '<span class="uk-text-success" uk-icon="icon: check"></span>' : '<span class="uk-text-danger" uk-icon="icon: clearclose"></span>',
                 ];
@@ -299,8 +302,6 @@ class StockController extends BaseController
        $_items = $this->__items([
             'buttons'     => $_buttons,
             'headers'     => $_headers,
-            'filters'     => $_filters,
-            'use_filters' => $_filter ? TRUE : FALSE,
             'items'       => $_items,
             'pagination'  => $_query->links('backend.partials.pagination')
         ]);
@@ -308,69 +309,75 @@ class StockController extends BaseController
         return view('backend.partials.list_items', compact('_items', '_wrap'));
     }
 
-
+    /** Add stock */
     public function store(Request $request)
-    {    //        print_r( $request);
-        //    exit();
-
- /*       if ($preview_fid = $request->input('preview_fid')) {
-            $_preview_fid = array_shift($preview_fid);
-            Session::flash('preview_fid', json_encode([f_get($_preview_fid['id'])]));
-        }*/
+    {   
+        $type = $request->get("type",0);
+        $discount = $request->get("discount",0);
+        $categories = $type != 'all_basket' ? /*$type != 'product_null' ?*/ $request->get("categories",0) : '' /*: ''*/;
+        $products =  $type != 'all_basket' ?  $request->get("products",0) : '';
+ 
         $_save = $request->only([
             'title',
-            'type',
             'code',
+            'type',
             'date_to',
             'status'
         ]);
+
         $this->validate($request, [
-            'title'       => 'required',
+            'title'      => 'required',
             'code'       => 'required',
-            'date_to'       => 'required'
+            'date_to'    => 'required',
+            'discount'   => $type != 'product_null' ? 'required|min:0|max:100|not_in:0' : '',
+            'categories' => $type != 'all_basket' ? 'required' : "",
+            'products'   => $type != 'all_basket' ? $type != 'sale_product' ? 'required' : '' : '',
         ], [], [
-            'title'       => 'Название',
+            'title'      => 'Название',
             'code'       => 'Код скидки',
-            'date_to'       => 'Дата'
+            'date_to'    => 'Дата',
+            'discount'   => 'Скидка',
+            'categories' => 'Категории',
+            'products'   => 'Продукция'
         ]);
-//        $_save['preview_fid'] = $_preview_fid['id'] ?? NULL;
+
         $_save['status'] = (int)($_save['status'] ?? 0);
-/*        if ($_save['type'] == 'product') {
-            $_save['product_id'] = $request->input('product.value');
-        }*/
+        $_save['details'] = json_encode(array('discount' => $discount, 'categories' => $categories, 'products' => $products));
+
         $_item = Stock::updateOrCreate([
             'id' => NULL
         ], $_save);
-/*
-        Session::forget([
-            'preview_fid',
-        ]);*/
 
         return $this->__response_after_store($request, $_item);
     }
+     
 
     public function update(Request $request, Stock $_item)
     {
-      //  print_r($request);
-      //  exit();
-/*
-        if ($preview_fid = $request->input('preview_fid')) {
-            $_preview_fid = array_shift($preview_fid);
-            Session::flash('preview_fid', json_encode([f_get($_preview_fid['id'])]));
-        }
-*/
-
+        $type = $request->get("type",0);
+        $discount = $request->get("discount",0);
+        $categories = $type != 'all_basket' ? /*$type != 'product_null' ?*/ $request->get("categories",0) : '' /*: ''*/;
+        $products =  $type != 'all_basket' ?  $request->get("products",0) : '';
+ 
         $this->validate($request, [
-            'title'       => 'required',
+            'title'      => 'required',
             'code'       => 'required',
-            'date_to'       => 'required'
+            'date_to'    => 'required',
+            'discount'   => $type != 'product_null' ? 'required|min:0|max:100|not_in:0' : '',
+            'categories' => $type != 'all_basket' ? 'required' : "",
+            'products'   => $type != 'all_basket' ? $type != 'sale_product' ? 'required' : '' : '',
         ], [], [
-            'title'       => 'Название',
+            'title'      => 'Название',
             'code'       => 'Код скидки',
-            'date_to'       => 'Дата'
+            'date_to'    => 'Дата',
+            'discount'   => 'Скидка',
+            'categories' => 'Категории',
+            'products'   => 'Продукция'
         ]);
+
         $_locale = $request->get('locale', DEFAULT_LOCALE);
         $_translate = $request->get('translate', 0);
+
         if ($_translate) {
             $_save = $request->only([
                 'title',
@@ -386,23 +393,13 @@ class StockController extends BaseController
                 'status'
             ]);
 
- //           $_save['preview_fid'] = $_preview_fid['id'] ?? NULL;
            $_save['status'] = (int)($_save['status'] ?? 0);
 
- /*
-            if ($_save['type'] == 'product') {
-                $_save['product_id'] = $request->input('product.value');
-            }
-            */
+           $_save['details'] = json_encode(array('discount' => $discount, 'categories' => $categories, 'products' => $products));
 
             app()->setLocale($_locale);
             $_item->update($_save);
         }
-        /*
-        Session::forget([
-            'preview_fid',
-        ]);
-*/
         return $this->__response_after_update($request, $_item);
     }
 
@@ -413,28 +410,10 @@ class StockController extends BaseController
         return $this->__response_after_destroy($request, $_item);
     }
 
-    public function product(Request $request)
-    {//print_r($request);
-       // exit();
-        
-        $_items = [];
-        if ($_search = $request->input('search')) {
-            $_items = UrlAlias::where('model_default_title', 'like', "%{$_search}%")
-                ->where('model_type', Product::class)
-                ->limit(8)
-                ->get();
-            if ($_items->isNotEmpty()) {
-                $_items->transform(function ($i) {
-                    return [
-                        'name' => $i->model_default_title,
-                        'view' => NULL,
-                        'data' => $i->model_id
-                    ];
-                })
-                    ->toArray();
-            }
-        }
-
-        return response($_items, 200);
+    /** Selection products depending on the category  */
+    public function getproducts($cid = 0){
+        if(!empty($cid)){
+               echo Stock::getProducts($cid);
+        }else  echo '';
     }
 }

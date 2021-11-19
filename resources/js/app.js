@@ -536,5 +536,6 @@ function useUpdateOrderLists($) {
     if (window.update_order_lists != undefined) {
         setInterval(useUpdateOrderLists, 15000);
     }
+
 })(jQuery);
 

@@ -652,3 +652,7 @@ Route::resource('/shop-stock','Shop\StockController', [
         'destroy'
     ]
 ]);
+Route::get('/shop-stock/getproducts/{category?}', [
+    'as'   => 'oleus.shop_stock.getproducts',
+    'uses' => 'Shop\StockController@getproducts'
+]);

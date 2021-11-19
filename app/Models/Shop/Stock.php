@@ -4,6 +4,7 @@ namespace App\Models\Shop;
 use App\Library\BaseModel;
 use App\Library\Frontend;
 use App\Models\Form\Review;
+use App\Models\Shop\Product;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -11,23 +12,22 @@ use Illuminate\Support\Facades\View;
 class Stock extends BaseModel
 {
     protected $table = 'shop_promo_code';
-   // protected $table = 'shop_gifts';
     protected $guarded = [];
     public $translatable = [
         'title'
     ];
-
-    public static function type($type='all'){
-        $types = array('all_basket'=>'Скидка на всю корзину','sale_product'=>'Скидка на определеный товар или категорию','product_null'=>'выбранный товар из админки за 0 грн');
-        if($type!='all') return $types[$type];
-        return $types;
-    }
 
     public function __construct()
     {
         parent::__construct();
     }
 
+    public static function type($type='all'){
+        $types = array('all_basket'=>'Скидка на всю корзину','sale_product'=>'Скидка на определеный товар или категорию','product_null'=>'Выбранный товар за 0 грн');
+        if($type!='all') return $types[$type];
+        return $types;
+    }
+/*
     public static function getInfo()
     {
         $_response = NULL;
@@ -100,19 +100,25 @@ class Stock extends BaseModel
 
         return $_response;
     }
+*/
 
-    
-    public static function getGift()
+    /** Selection products depending on the category  */
+    public static function _getProducts($cid){
+        return Product::leftJoin('shop_product_category', 'shop_product_category.model_id', '=', 'shop_products.id')
+        ->where('shop_product_category.category_id', $cid)
+        ->pluck('title', 'id')
+        ->prepend('- Выбрать -', '');
+    }
+
+    public static function getProducts($cid)
     {
-        echo"====";
-        exit();
-        /*
-        $_gifts = self::getInfo();
-        if ($_gifts && is_numeric($_gifts['current_step'])) {
-            return $_gifts['steps']->has($_gifts['current_step']) ? $_gifts['steps']->get($_gifts['current_step']) : NULL;
-        }
+        $prod =  self::_getProducts($cid);
 
-        return NULL;
-        */
+        $res = '';
+        foreach($prod as $key => $val){
+            $res .= '<option value="'.$key.'">'.$val.'</option>';
+        }  
+     
+        return $res;
     }
 }
