@@ -136,6 +136,12 @@ return [
         'not_analogues'     => 'У данного препарата нет аналогов.',
         'certificate_empty' => 'Вкажіть номер сертифіката.',
         'min_amount' => 'Сума замовлення повинна бути більше :min грн.',
+        'not_no_text_promo_code' => 'Ви не ввели Ваш ПРОМО код',
+        'not_no_promo_code' => 'Такого ПРОМО коду не існує',
+        'not_no_active_promo_code' => 'Цей ПРОМО код не активний',
+        'not_no_date_active_promo_code'=>'ПРОМО код не активний у цей період часу',
+        'good_active_promo_code'=>'Ви активували ПРОМО код',
+        'good_not_active_promo_code'=>'Ви деактивували ПРОМО код', 
     ],
     'checkout' => [
         'delivery_value'  => 'Доставка:',
