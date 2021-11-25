@@ -83,6 +83,7 @@ return [
             'sub_title'                      => 'Информация',
             'certificate'                    => 'Cертификат',
             'birthday'                       => 'У меня День рождения - <i>12</i>%',
+            'promo_code'                     => 'Ваш промо код',
         ],
         'search'              => [
             'string' => 'Искать...',
@@ -166,6 +167,7 @@ return [
             'clear_basket'      => 'Очистить корзину',
             'use'               => 'Применить',
             'clear'             => 'Очистить',
+            'cancel'           => 'Отменить',
         ]
     ],
     'labels'   => [
@@ -192,10 +194,13 @@ return [
             'total_amount_2'  => ':product на сумму :amount',
             'total_amount_3'  => 'Сумма к оплате: :amount',
             'total_amount_4'  => 'Сумма',
+            'total_amount_5'  => 'Итого: :amount',
             'delivery_amount' => 'Стоимость доставки: :amount грн. Бесплатная доставка при заказе от :min грн',
             'delivery_pickup' => 'Вы экономите :amount',
             'delivery_free'   => 'Доставка бесплатно',
             'you_saved'       => 'Вы экономите :amount',
+            'promo_code'      => 'Промокод',
+            'discount'        => 'Скидка: :discount',
         ],
         'search'   => [
             'example'        => 'Пример:',

@@ -30,9 +30,12 @@ class Basket extends BaseModel
     ];
     public $compositionLoad = NULL;
     public $delivery = 'delivery';
+    public $promo_code = [];
+
     public $certificate = NULL;
     public $certificateClear = FALSE;
     public $total_amount = 0;
+    public $total_amount_promo = NULL;
     public $total_amount_without_modification = 0;
 
     public function __construct($entity = NULL)
@@ -133,7 +136,7 @@ class Basket extends BaseModel
     }
 
     public function getCompositionAttribute()
-    {
+    {   
         $_response = collect([]);
         $_certificate = NULL;
         $_data = $this->data;
@@ -176,14 +179,44 @@ class Basket extends BaseModel
                 'application'     => $_certificate_application
             ], $_certificate);
         }
+
+        //$this->bClear();
+
+        /** promo code is base - config */
+        //Cookie::queue(Cookie::make('promo_code', ''));
+
+
+        $_promo_code = Cookie::get('promo_code');
+        //$this->promo_code = Cookie::get('promo_code');
+        $this->promo_code = (array)json_decode($_promo_code);
+
+       // echo"=2==========";
+       // print_r($this->promo_code);
+
         if ($_data && is_null($this->compositionLoad)) {
             $_basket = $this;
             $_basket->total_amount = 0;
+            $_basket->total_amount_promo = 0;
+
             $_basket->total_amount_without_modification = 0;
+            
             $_basket_composition = $_data;
+
+            //print_r($_data);
+
+
+            /** promo code => type = product_null */
+            if(!empty($this->promo_code)&&$this->promo_code['type'] == 'product_null'&&!empty($this->promo_code['products'])){
+               $_basket_composition[$this->promo_code['products']][0]['promo_code'] = [
+                'quantity'    => 1,
+                'price'       => 0,
+                'composition' => NULL
+            ];
+            }
 
             $_response = Product::from('shop_products as p')
                 ->leftJoin('shop_product_prices as sp', 'sp.product_id', '=', 'p.id')
+                ->leftJoin('shop_product_category as cp', 'cp.model_id', '=', 'p.id')
                 ->with([
                     '_alias',
                     '_param_items',
@@ -191,7 +224,7 @@ class Basket extends BaseModel
                     '_price'
                 ])
                 ->whereIn('sp.id', array_keys($_basket_composition))
-                ->select([
+                 ->select([
                     'p.id',
                     'p.sku',
                     'p.iiko_id',
@@ -208,6 +241,7 @@ class Basket extends BaseModel
                     'sp.id as price_id',
                     'sp.part as price_part',
                     'sp.quantity_id as quantity_id',
+                    'cp.category_id',
                 ])
                 ->remember(REMEMBER_LIFETIME)
                 ->get();
@@ -269,8 +303,10 @@ class Basket extends BaseModel
                     }
                     $_amount_products_without_modification = 0;
                     $_amount = 0;
+                    $_amount_promo = 0;
                     $__quantity = 0;
                     $__composition = [];
+
                     foreach ($_basket_composition[$_item->price_id] as $_type => $_rows) {
                         foreach ($_rows as $_key => $_row) {
                             $__weight = array_merge([], $_item->weight);
@@ -291,14 +327,41 @@ class Basket extends BaseModel
                                     }
                                 }
                             }
+
+                            
                             $_tp = (float)$_item->price['format']['price'];
                             if ($_basket->certificate && $_key === 'certificate') {
                                 $_tp = (float)$_item->price_certificate['format']['price'];
                             }
+
+                            //** full price */
                             $__price = $__additions_amount + $_tp;
                             $__amount = $__price * $_row['quantity'];
+
+                            
+                            if(!empty($this->promo_code)){
+                                /** promo code => type = product_null */
+                                if($this->promo_code['type'] == 'product_null'&&!empty($this->promo_code['products'])&&$_item->id==$this->promo_code['products'])
+                                    {$__amount = 0; $__price = 0;}
+                                
+                                /** promo code => type = sale_product */
+                                if($this->promo_code['type'] == 'sale_product'&&
+                                   $this->promo_code['categories']==$_item->category_id&&(
+                                        !empty($this->promo_code['products'])&&
+                                        $this->promo_code['products']==$_item->id||
+                                        empty($this->promo_code['products']))
+                                ){
+                                    $_amount_promo += ($__price = $__amount - ceil($__amount * ($this->promo_code['discount'] / 100)));
+                                    $_key = 'promo_code';
+                                }
+                                else  $_amount_promo += $__amount;
+                            }
+                            else  $_amount_promo += $__amount;   
+
                             $_amount_products_without_modification += $_tp * $_row['quantity'];
+
                             $_amount += $__amount;
+ 
                             if ($_type == 1) {
                                 $_m = $_item->getSpicyMark();
                                 if ($__marks && !isset($__marks['options'][4]) && $_m) {
@@ -316,6 +379,7 @@ class Basket extends BaseModel
                                 unset($__marks['options'][4]);
                                 if (!$__marks['options']) $__marks = [];
                             }
+
                             $__composition[] = [
                                 'key'              => $_key,
                                 'spicy'            => $_type,
@@ -327,21 +391,22 @@ class Basket extends BaseModel
                                 'additions_amount' => $__additions_amount ? transform_price($__additions_amount) : NULL,
                                 'amount'           => transform_price($__amount),
                                 'composition'      => $_row['composition'],
-                                'sort'             => ($_basket->certificate && $_key === 'certificate' ? -100 : ($_key == 0 ? 0 : 1)),
+                                'sort'             => ($_basket->certificate && $_key === 'certificate' || $_key === 'promo_code' ? -100 : ($_key == 0 ? 0 : 1)),
                             ];
                         }
                     }
+
                     $_item->amount = transform_price($_amount);
-                    $_basket->total_amount += $_item->amount['format']['price'];
+                    $_item->total_amount_promo = transform_price($_amount_promo);
+
+                    $_basket->total_amount += $_amount;
+                    $_basket->total_amount_promo += $_amount_promo;
+
                     $_basket->total_amount_without_modification += $_amount_products_without_modification;
                     $_item->quantity = $__quantity;
 
-
-            
-
-                    $_item->composition = collect($__composition)
-                        ->sortBy('sort');
-
+                    $_item->composition = collect($__composition)->sortBy('sort');
+                   
                     return $_item;
                 });
             }
@@ -352,8 +417,18 @@ class Basket extends BaseModel
                 $_basket->total_amount -= $_basket->certificate['discount_amount'];
             } elseif ($this->certificate && $this->certificate['type'] == 'amount') {
                 $_basket->total_amount -= $_basket->certificate['discount_amount'];
-                if ($_basket->total_amount <= 0) $_basket->total_amount = 0;
             }
+
+            /** promo code => type = all_basket */
+            if(!empty($this->promo_code)&&($this->promo_code['type'] == 'all_basket')&&$_basket->total_amount_promo!=$_basket->amount){
+                    $_basket->total_amount_promo = $_basket->total_amount_promo - ceil($_basket->total_amount_promo * ($this->promo_code['discount'] / 100));
+                    //if ($this->promo_code['type'] == 'all_basket') $_basket->discount_promo = $this->promo_code['discount'];
+            }
+
+            $_basket->total_amount_promo = transform_price($_basket->total_amount_promo);
+
+            if ($_basket->total_amount <= 0) $_basket->total_amount = 0;
+  
             $this->compositionLoad = $_response;
         } elseif ($this->compositionLoad) {
             $_response = $this->compositionLoad;
@@ -580,6 +655,7 @@ class Basket extends BaseModel
         $_data = $this->data;
         foreach ($composition as $_price => $_quantity) {
             $_keys = explode('::', $_price);
+            if($_keys[2] == 'promo_code') $_keys[2] = 0;
             if (isset($_data[$_keys[0]][$_keys[1]][$_keys[2]]['quantity'])) {
                 $_data[$_keys[0]][$_keys[1]][$_keys[2]]['quantity'] = $_quantity;
             }
@@ -650,6 +726,7 @@ class Basket extends BaseModel
     public function bSave($composition)
     {
         global $wrap;
+
         if ($this->exists == FALSE) {
             $_new_key = $this->render_key();
             Cookie::queue(Cookie::make('basket_key', $_new_key));
@@ -673,6 +750,15 @@ class Basket extends BaseModel
 
         return $_response;
     }
+
+
+    public static function promoCodeSave($key,$details)
+    {
+        Cookie::queue(Cookie::make($key, $details, 15, null, null, false, false));
+    }
+
+
+
 
     public function bClear()
     {
@@ -734,6 +820,12 @@ class Basket extends BaseModel
                 if (!$_value['use']) continue;
                 $_delivery_fields_values[$_type] = $_value['title'];
             }
+/*
+            echo"======";
+            print_r($basket->promo_code);
+            echo"======";
+            print_r($this->amount_promo);*/
+
             $_response = form_generate([
                 'id'         => $_form_id,
                 'ajax'       => FALSE,
@@ -858,11 +950,38 @@ class Basket extends BaseModel
                     // '</div><div class="uk-width-auto">',
                     // '<button type="button" name="certificate" class="uk-button uk-button-success uk-position-relative' . ($this->certificate ? ' certificate-used' : NULL) . '">' . ($this->certificate ? trans('forms.buttons.checkout.clear') : trans('forms.buttons.checkout.use')) . '</button>',
                     // '</div></div>',
-                    '</li></ul><div class="total"><div class="row" id="checkout-order-delivery-amount">' . $this->showDeliveryString() . '</div><div class="row sums" id="checkout-order-total-amount"><h6>',
-                    trans('forms.labels.checkout.total_amount_3', ['amount' => '&nbsp;</h6><span class="price-amount">' . $this->amount['format']['view_price'] . '&nbsp;' . $this->amount['currency']['suffix'] . '</span> ']),
+                    '</li></ul><div class="total"><div class="row" id="checkout-order-delivery-amount">' . $this->showDeliveryString() . '</div>',
+
+                    '<label>' .  trans("forms.labels.checkout.promo_code") . '</label>',
+
+                    '<div class="delivery-items uk-grid-small uk-child-width-1-2 uk-grid" style="margin:10px 0 0 -20px; padding-left: 0;">',
+
+                    field_render('stock', [
+                        'value'      => $basket->promo_code['code'] ?? NULL,
+                        'class'      => 'stock',
+                        'attributes' => [
+                            'placeholder' => trans('forms.fields.checkout.promo_code'),
+                            'disabled'=> !empty($basket->promo_code['code']) ? 'disabled' : false,
+                            'style'=>'padding:10px 20px'
+                        ],
+                        'form_id'    => $_form_id,
+                    ]),
+
+                    '<div class="uk-margin"><button type="submit" class="btn-submit btn-submit-promo" value="1" name="send_promo_code">' . (!empty($basket->promo_code)?trans('forms.buttons.checkout.cancel'):trans('forms.buttons.checkout.use')) . '</button></div>',
+                    '</div>',
+
+                    '<div class="row sums '.(empty($basket->total_amount_promo['format']['view_price'])||!empty($basket->promo_code['type'])&&$basket->promo_code['type']!='all_basket'||empty($basket->promo_code)?'uk-hidden':'').'" id="checkout-order-total-amount2"><h6>',
+                    trans('forms.labels.checkout.total_amount_5', ['amount' => '&nbsp;</h6><span class="price-amount">' .  $this->amount['format']['view_price'] . '&nbsp;' . $this->amount['currency']['suffix'] . '</span> ']),
+                    '</div>',
+
+                    '<div class="row sums '.(empty($basket->total_amount_promo['format']['view_price'])||!empty($basket->promo_code['type'])&&$basket->promo_code['type']!='all_basket'||empty($basket->promo_code)?'uk-hidden':'').'" id="checkout-order-total-discount"><h6>',
+                    trans('forms.labels.checkout.discount', ['discount' => '&nbsp;</h6><span class="price-amount"> '.($basket->promo_code['discount'] ?? "0").'%</span> ']),
+                    '</div>',
+
+                    '<div class="row sums" id="checkout-order-total-amount"><h6>',
+                    trans('forms.labels.checkout.total_amount_3', ['amount' => '&nbsp;</h6><span class="price-amount">' . (!empty($basket->total_amount_promo['format']['view_price']) ? $basket->total_amount_promo['format']['view_price']. '&nbsp;' . $this->total_amount_promo['currency']['suffix']:$this->amount['format']['view_price'] . '&nbsp;' . $this->amount['currency']['suffix']) . '</span> ']),
                     '</div></div>',
-
-
+ 
                     //                    field_render('person', [
                     //                        'form_id'    => $_form_id,
                     //                        'type'       => 'number',

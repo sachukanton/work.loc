@@ -65,6 +65,40 @@ function usePhoneMask($) {
             }
         });
 
+        /*
+        $('.stock').bind('input', function(){
+           var th = $(this); 
+           $.ajax({
+                url: '/ajax/stock/ispromocode', 
+                method: 'post',
+                dataType: 'json',
+                data: {code: $(this).val()},
+                success: function(data){
+                    //if(data.status)  
+                    _ajax_post(th, '/ajax/stock/addpromocode');
+                }
+            });
+        });
+        */
+
+        $('body').delegate('.btn-submit-promo', 'click', function () {
+           var th = $("#form-checkout-order-stock");
+
+          $.ajax({
+                url: '/ajax/stock/ispromocode', 
+                method: 'post',
+                data: {
+                    code: th.val(),
+                    val: $(".btn-submit-promo").val()
+                    },
+                success: function(data){
+                    _ajax_post(th, '/ajax/stock/addpromocode',{data:data});
+                }
+            });
+            return false;
+
+        });
+
 
         $('body').delegate('.icons-category', 'click', function () {
             if($(this).hasClass('open')) {

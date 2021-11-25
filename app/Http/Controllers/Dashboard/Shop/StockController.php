@@ -95,6 +95,10 @@ class StockController extends BaseController
                         'type'  => 'hidden',
                         'value' => $this->defaultLocale,
                     ]),
+                    field_render('id', [
+                        'type'  => 'hidden',
+                        'value' => $entity->id,
+                    ]),
                     '<div class="uk-grid"><div class="uk-width-1-2">',
                     field_render('title', [
                         'label'      => 'Название',
@@ -327,7 +331,7 @@ class StockController extends BaseController
 
         $this->validate($request, [
             'title'      => 'required',
-            'code'       => 'required',
+            'code'       => 'required|unique:shop_promo_code,code',
             'date_to'    => 'required',
             'discount'   => $type != 'product_null' ? 'required|min:0|max:100|not_in:0' : '',
             'categories' => $type != 'all_basket' ? 'required' : "",
@@ -354,14 +358,15 @@ class StockController extends BaseController
 
     public function update(Request $request, Stock $_item)
     {
+        $id = $request->get("id",0);
         $type = $request->get("type",0);
         $discount = $request->get("discount",0);
         $categories = $type != 'all_basket' ? /*$type != 'product_null' ?*/ $request->get("categories",0) : '' /*: ''*/;
         $products =  $type != 'all_basket' ?  $request->get("products",0) : '';
- 
+
         $this->validate($request, [
             'title'      => 'required',
-            'code'       => 'required',
+            'code'       => 'required|unique:shop_promo_code,code,'.$id,
             'date_to'    => 'required',
             'discount'   => $type != 'product_null' ? 'required|min:0|max:100|not_in:0' : '',
             'categories' => $type != 'all_basket' ? 'required' : "",
