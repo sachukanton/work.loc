@@ -507,19 +507,19 @@ class ShopController extends BaseController
 
                     Notification::route('mail', env('MAIL_ADMIN_NOTIFICATION'))
                         ->notify(new ShopOrderNotification($_order));
-                    try {
-                        if ($_check_create_order && $_check_create_order['resultState'] == 0) {
 
+                    try {
+
+                        if (empty($_check_create_order['resultState'])) {
+ 
                             $_iiko_order = app('iiko')->OrdersApi()->addOrder($_iiko_requestOrder);
-/*
-                             print_r($_iiko_order);
-                            exit();
-*/
-                            $_order->where('id', $_order->id)->update([
+
+                            $_order->update([
                                 'rk_order_id'     => $_iiko_order['orderId'],
                                 'rk_order_number' => $_iiko_order['number'],
                                 'rk_order_sum'    => $_iiko_order['sum']
                             ]);
+
                          }
                         
                     } catch (Exception $e) {
