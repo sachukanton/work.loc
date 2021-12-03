@@ -100,7 +100,7 @@
                                         <span style="text-decoration: line-through;"
                                               class="uk-text-danger">{!! $_product->price['format']['view_price'] !!}</span>
                                         {!! $_product->price_certificate['format']['view_price_2'] !!}
-                                    @elseif($_comp['key'] === 'promo_code')
+                                    @elseif($_comp['key'] === 'promo_code'&&$_product->price['format']['view_price'] != 0)
                                          <span style="text-decoration: line-through;"
                                               class="uk-text-danger">{!! $_product->price['format']['view_price'] !!}</span>
                                         {!! $_comp['price']['format']['view_price_2'] !!}

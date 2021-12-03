@@ -274,8 +274,11 @@ class ShopController extends BaseController
                 }
                
                 $_iiko_requestOrder = $_basket->getOrderRequest($request);
-
                 
+                //print_r($_iiko_requestOrder);
+                //exit();
+
+
                 $_check_create_order = NULL;
                 try {
                     $_check_create_order = app('iiko')->OrdersApi()->checkCreate($_iiko_requestOrder);
@@ -511,10 +514,10 @@ class ShopController extends BaseController
                     try {
 
                         if (empty($_check_create_order['resultState'])) {
- 
+                            
                             $_iiko_order = app('iiko')->OrdersApi()->addOrder($_iiko_requestOrder);
 
-                            $_order->update([
+                            $_order->where('id', $_order->id)->update([
                                 'rk_order_id'     => $_iiko_order['orderId'],
                                 'rk_order_number' => $_iiko_order['number'],
                                 'rk_order_sum'    => $_iiko_order['sum']

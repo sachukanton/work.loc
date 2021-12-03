@@ -16,6 +16,12 @@
         </tr>
     </thead>
     <tbody>
+
+        @if(!empty($_entity->promo_code)){
+            $promo_code = json_decode($_entity->promo_code,1);
+            $promo_price = $_entity->amount_view['format']['view_price'] - ceil($_entity->amount_view['format']['view_price']*$promo_code['discount']/100);
+        @endif;
+
         @foreach($_items as $_item)
             <tr>
                 <td>
@@ -63,6 +69,22 @@
         @endforeach
     </tbody>
     <tfoot>
+        
+    @if(!empty($promo_code)&&$promo_code['type'] == 'all_basket')
+        <tr class="uk-h3">
+            <td colspan="4" class="uk-text-right">Всего:</td>
+            <td class="uk-text-right uk-text-primary" colspan="2">
+                {!! "{$_entity->amount_view['format']['view_price']} {$_entity->amount_view['currency']['suffix']}" !!} 
+            </td>
+        </tr>
+        <tr class="uk-h3">
+            <td colspan="4" class="uk-text-right">Скидка:</td>
+            <td class="uk-text-right uk-text-primary" colspan="2">
+                {!! "{$promo_code['discount']} %" !!} 
+            </td>
+        </tr>
+    @endif
+
         <tr class="{{ $_entity->discount ? 'uk-h4' : 'uk-h3' }}">
             <td colspan="4"
                 class="uk-text-right">
@@ -72,11 +94,16 @@
                     Итого:
                 @endif
             </td>
-            <td class="uk-text-right uk-text-primary"
-                colspan="2">
-                {!! "{$_entity->amount_view['format']['view_price']} {$_entity->amount_view['currency']['suffix']}" !!}
+            <td class="uk-text-right uk-text-primary" colspan="2">
+                @if(!empty($_entity->promo_code)&&!empty($promo_code)&&$promo_code['type'] == 'all_basket')
+                    {!! "{$promo_price} {$_entity->amount_view['currency']['suffix']}" !!}
+                @else
+                    {!! "{$_entity->amount_view['format']['view_price']} {$_entity->amount_view['currency']['suffix']}" !!}
+                @endif
             </td>
         </tr>
+
+
         @if($_entity->discount)
             <tr class="uk-h4">
                 <td colspan="4"
@@ -99,6 +126,8 @@
                 </td>
             </tr>
         @endif
+
+
     </tfoot>
 </table>
 {{--<div class="uk-margin-top uk-text-right">--}}

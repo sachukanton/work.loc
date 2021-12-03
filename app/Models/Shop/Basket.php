@@ -341,8 +341,11 @@ class Basket extends BaseModel
                             
                             if(!empty($this->promo_code)){
                                 /** promo code => type = product_null */
-                                if($this->promo_code['type'] == 'product_null'&&!empty($this->promo_code['products'])&&$_item->id==$this->promo_code['products'])
-                                    {$__amount = 0; $__price = 0;}
+                                if ($this->promo_code['type'] == 'product_null' && !empty($this->promo_code['products']) && $_item->id == $this->promo_code['products'] && !is_numeric($_key)) {
+                                    $__amount = 0;
+                                    $__price = 0;
+                                    $_tp = 0;
+                                }
                                 
                                 /** promo code => type = sale_product */
                                 if($this->promo_code['type'] == 'sale_product'&&
@@ -473,12 +476,21 @@ class Basket extends BaseModel
         $_items = [];
         $_composition->map(function ($p) use (&$_items) {
             foreach ($p->composition as $_spicy => $_comp) {
+                /*$arr = [
+                    'id'     => $p->iiko_id,
+                    'code'   => $p->sku,
+                    'amount' => (int)$_comp['quantity'],
+                    'sum'    => (float)$_comp['price']['original']['price'],
+                ];*/
+               // if($arr['sum'] == 0)  $arr['name'] = $_comp['name']." [ПРОМО]";
+
                 $_items[] = [
                     'id'     => $p->iiko_id,
                     'code'   => $p->sku,
                     'amount' => (int)$_comp['quantity'],
                     'sum'    => (float)$_comp['price']['original']['price'],
                 ];
+                
             }
         });
         $_pre_order_at = $_data['pre_order_at'] ?? NULL;

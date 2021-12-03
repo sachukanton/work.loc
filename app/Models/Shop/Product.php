@@ -926,7 +926,7 @@ class Product extends BaseModel
             $_price['product_id'] = $this->id;
             //            $_price['not_available'] = $_price['status'] == 'not_available' ? 1 : ($_price['status'] == 'in_stock' && !$_price['quantity'] ? 1 : 0);
             $_price['not_available'] = 0;
-            $_price['status'] = 'not_limited';
+            //$_price['status'] = 'not_limited';
             $_price['base_price'] = $_price['discount_price'] ? $_price['discount_price'] : $_price['price'];
             $_price['default'] = 1;
             //            $_price['pharm_1c'] = '00000000-0000-0000-0000-000000000000';
@@ -1367,7 +1367,6 @@ class Product extends BaseModel
     public function _render($options = NULL)
     {
         global $wrap;
-
         $this->_eCommerce = collect([]);
         $_view = $options['view_mode'] ?? NULL;
         $this->_load($_view);
