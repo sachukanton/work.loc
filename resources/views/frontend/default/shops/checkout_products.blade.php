@@ -4,10 +4,14 @@
 @endphp
 <div id="form-checkout-order-products">
     @if(isset($_items) && $_items)
+
         <div class="cart__main--items-wrapper">
             @foreach($_items as $_key => $_product)
-                @foreach($_product->composition as $_comp)
-                    <div class="cart__main--item">
+                @foreach($_product->composition as $_comp) 
+                    @php
+                        //print_r($_comp);
+                    @endphp
+                      <div class="cart__main--item">
                             {{--@if($_device_type != 'mobile')--}}
                                     <div class="cart__main_img">
                                         @if($_product->preview_fid)
@@ -22,7 +26,7 @@
                                     </div>
                             {{--@endif--}}
                             <div class="cart__main_name">
-                                @l(str_limit(strip_tags($_product->title), 50) . ($_comp['key'] === 'certificate' ? ' [СЕРТИФИКАТ]' : null), $_product->generate_url,
+                                @l(str_limit(strip_tags($_product->title), 50) . ($_comp['key'] === 'certificate' ? ' [СЕРТИФИКАТ]' : ($_comp['key'] === 'promo_code' ? !empty($_basket->promo_code['discount'])? ' [ПРОМО КОД - '.$_basket->promo_code['discount'].'%]' : ' [ПРОМО КОД]' :  null)), $_product->generate_url,
                                 ['attributes' => ['title' => strip_tags(str_replace(["'",'"'], '',
                                 $_product->title)), 'class' => '']])
                             </div>
@@ -63,7 +67,7 @@
                                     </div>
                                 </div>
                             @endif -->
-                                <div class="input uk-input-number-counter-box">
+                                 <div class="input uk-input-number-counter-box">
                                     <input class="sum"
                                             type="number"
                                             value="{{ $_comp['quantity'] }}"
@@ -80,7 +84,7 @@
                                         <button type="button"
                                                 name="increment"
                                                 class="plus"
-                                                {{ $_comp['key'] === 'certificate' ? 'disabled' : NULL }}>
+                                                {{ $_comp['key'] === 'certificate' ? 'disabled' : ($_comp['key'] === 'promo_code'&&empty($_basket->promo_code['discount']) ? 'disabled' : NULL) }}>
                                             +
                                         </button>
                                         <button type="button"
@@ -96,6 +100,10 @@
                                         <span style="text-decoration: line-through;"
                                               class="uk-text-danger">{!! $_product->price['format']['view_price'] !!}</span>
                                         {!! $_product->price_certificate['format']['view_price_2'] !!}
+                                    @elseif($_comp['key'] === 'promo_code'&&$_product->price['format']['view_price'] != 0)
+                                         <span style="text-decoration: line-through;"
+                                              class="uk-text-danger">{!! $_product->price['format']['view_price'] !!}</span>
+                                        {!! $_comp['price']['format']['view_price_2'] !!}
                                     @else
                                         {!! $_product->price['format']['view_price_2'] !!}
                                     @endif

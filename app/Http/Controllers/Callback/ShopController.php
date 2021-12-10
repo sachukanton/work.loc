@@ -10,6 +10,7 @@ use App\Models\Shop\Category;
 use App\Models\Shop\Compare;
 use App\Models\Shop\Form;
 use App\Models\Shop\Gift;
+use App\Models\Shop\Stock;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderProduct;
 use App\Models\Shop\Price;
@@ -212,6 +213,7 @@ class ShopController extends BaseController
                 'phone' => 'required|string|phoneNumber|phoneOperatorCode',
                 //                'captcha'                 => 'required|reCaptchaV3',
             ];
+            
             if ($_type == 'full') {
                 $_validate_rules = array_merge($_validate_rules, [
                     'agreement'               => 'required',
@@ -234,6 +236,7 @@ class ShopController extends BaseController
                     'data'   => 'uk-form-danger'
                 ]
             ];
+            
             if ($_validator->fails()) {
                 foreach ($_validator->errors()->messages() as $_field => $_message) {
                     $_validate_message .= "<div>{$_message[0]}</div>";
@@ -269,7 +272,13 @@ class ShopController extends BaseController
 
                     return response($_response, 200);
                 }
+               
                 $_iiko_requestOrder = $_basket->getOrderRequest($request);
+                
+                //print_r($_iiko_requestOrder);
+                //exit();
+
+
                 $_check_create_order = NULL;
                 try {
                     $_check_create_order = app('iiko')->OrdersApi()->checkCreate($_iiko_requestOrder);
@@ -278,6 +287,8 @@ class ShopController extends BaseController
                 } catch (\Exception $e) {
                     report($e);
                 }
+
+ 
                 //                if (($_u = Auth::user()) && $_u->id == 1) {
                 //                    dd($_check_create_order);
                 //                }
@@ -345,6 +356,7 @@ class ShopController extends BaseController
                 //                    dd($_iiko_order, $_iiko_requestOrder, $_iiko_requestOrder);
                 //
                 //                }
+
                 if ($_type == 'quick') {
                     $_save = $request->only([
                         'name',
@@ -381,22 +393,29 @@ class ShopController extends BaseController
                         $_iiko_requestOrder['order']['discountCardTypeId'] = '1b479511-ca7f-4df8-9d64-3dd33b6c00e8';
                     }
                     if ($_save['payment_method'] && $_save['payment_method'] == 'cash') {
-                        $_iiko_requestOrder['order']['paymentItems'] = [
+                        $_iiko_requestOrder['order']['paymentItems'] = [  //** Элементы оплаты заказа */
                             [
-                                'paymentType'           => [
+                                'paymentType'           => [ //** Тип оплаты (одно из полей: id, code является обязательным) */
                                     'code' => 'CASH'
                                 ],
-                                'sum'                   => $_basket->total_amount_without_modification,
-                                'isProcessedExternally' => FALSE,
+                                'sum'                   => $_basket->total_amount_without_modification,  //** Сумма к оплате */
+                                'isProcessedExternally' => FALSE,                                        //** Является ли позиция оплаты проведенной */
                             ]
                         ];
                     }
                 }
                 $_save['amount'] = $_basket->total_amount_without_modification;
                 $_save['delivery_free'] = 1;
+
+                if(!empty($_basket->promo_code)){
+                    $_save['promo_code'] = json_encode($_basket->promo_code);
+                    $_iiko_requestOrder['coupon'] = $_basket->promo_code['code'];
+                }
+
                 $_order = new Order();
                 $_order->fill($_save);
                 $_order->save();
+
                 //                if (Auth::user()) {
                 //                    dd($_order);
                 //                }
@@ -432,16 +451,18 @@ class ShopController extends BaseController
                     //                        'price'    => $_product['price']
                     //                    ];
                 }
+
                 if ($_type == 'full') {
                     $_order_discount = 0;
                     if ($_save['delivery_method'] == 'pickup') {
                         $_order_discount = $_basket->getDeliveryAmount();
                     }
+
                     if ($_order_discount) {
                         //                        if ($_basket->certificate && $_basket->certificate['type'] == 'product' && $_save['delivery_method'] != 'pickup') $_order_discount = 0;
-                        $_order->update([
+                        $_order->where('id', $_order->id)->update([
                             'discount'             => $_order_discount,
-                            'amount_less_discount' => $_order->amount - $_order_discount,
+                            'amount_less_discount' => $_order->amount - $_order_discount
                         ]);
                     }
                     // $_order_discount = $_basket->certificate && $_basket->certificate['discount_amount'] ? $_basket->certificate['discount_amount'] : 0;
@@ -476,7 +497,7 @@ class ShopController extends BaseController
                     $_response['commands'][] = [
                         'command' => 'eval',
                         'options' => [
-                            'data' => "$('#liqPay-form form').submit();"
+                        'data' => "$('#liqPay-form form').submit();"
                         ]
                     ];
                 } else {
@@ -484,18 +505,26 @@ class ShopController extends BaseController
                     $_order_amount = view_price($_order_amount, $_order_amount);
                     spy("На сайте оставлен заказ товаров <a href='/oleus/shop-orders/{$_order->id}/edit' class='uk-text-bold' target='_blank'>№{$_order->id}</a> на сумму <span class='uk-text-bold'>{$_order_amount['format']['view_price']}</span> {$_order_amount['currency']['suffix']}. Текущий статус заказа <span class='uk-text-uppercase uk-text-bold'>" . trans('shop.status.' . $_order->status) . "</span>. <a href='/oleus/shop-orders/{$_order->id}/edit'>Просмотреть данные заказа</a>.", 'success');
                     Cookie::queue(Cookie::forget('frontPad_certificate'));
-                    $_basket->bClear();
+                    $_basket->bClear(); //** clear basket  */
+                    Basket::promoCodeSave('promo_code','');
+
                     Notification::route('mail', env('MAIL_ADMIN_NOTIFICATION'))
                         ->notify(new ShopOrderNotification($_order));
+
                     try {
-                        if ($_check_create_order && $_check_create_order['resultState'] == 0) {
+
+                        if (empty($_check_create_order['resultState'])) {
+                            
                             $_iiko_order = app('iiko')->OrdersApi()->addOrder($_iiko_requestOrder);
-                            $_order->update([
+
+                            $_order->where('id', $_order->id)->update([
                                 'rk_order_id'     => $_iiko_order['orderId'],
                                 'rk_order_number' => $_iiko_order['number'],
-                                'rk_order_sum'    => $_iiko_order['sum'],
+                                'rk_order_sum'    => $_iiko_order['sum']
                             ]);
-                        }
+
+                         }
+                        
                     } catch (Exception $e) {
                         report($e);
                     }
@@ -795,6 +824,36 @@ class ShopController extends BaseController
                         'data'   => 'uk-disabled'
                     ]
                 ];
+
+                $_response['commands'][] = [
+                    'command' => 'replaceWith',
+                    'options' => [
+                        'target' => '#form-checkout-order-products',
+                        'data'   => $_basket->show_checkout_products($_basket)
+                    ]
+                ];
+
+                /** updating prices in the basket */
+                $_response['commands'][] = [
+                    'command' => 'html',
+                    'options' => [
+                        'target' => '#checkout-order-total-amount2 .price-amount',
+                        'data'   => $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix']
+                    ]
+                ];
+ 
+                $_response['commands'][] = [
+                    'command' => 'html',
+                    'options' => [
+                        'target' => '#checkout-order-total-amount .price-amount',
+                        'data'   => (
+                            !empty($_basket->total_amount_promo['format']['view_price']) ? 
+                            $_basket->total_amount_promo['format']['view_price']. '&nbsp;' . $_basket->total_amount_promo['currency']['suffix']:
+                            $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix'])
+                    ]
+                ];
+
+        
             }
             if ($action == 'add') {
                 $cat = NULL;
@@ -834,10 +893,12 @@ class ShopController extends BaseController
         try {
             $_basket = app('basket');
             $product->price = $product->_render_price($_basket);
+
             if ($product->price['view_price']) {
                 $_basket_action = $_basket->add($product, 1);
                 $product->price = $_basket_action === FALSE ? $product->_render_price($_basket) : $product->_render_price($_basket_action);
                 $_basket_template = $_basket->show_checkout_products($_basket);
+
                 $_response['commands'][] = [
                     'command' => 'html',
                     'options' => [
@@ -845,6 +906,7 @@ class ShopController extends BaseController
                         'data'   => clear_html($_basket_template),
                     ]
                 ];
+
                 $_response['commands'][] = [
                     'command' => 'text',
                     'options' => [
@@ -946,6 +1008,26 @@ class ShopController extends BaseController
             ]
         ];
 
+        /** updating prices in the basket  */
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#checkout-order-total-amount2 .price-amount',
+                'data'   => $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix']
+            ]
+        ];
+
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#checkout-order-total-amount .price-amount',
+                'data'   => (
+                    !empty($_basket->total_amount_promo['format']['view_price']) ? 
+                    $_basket->total_amount_promo['format']['view_price']. '&nbsp;' . $_basket->total_amount_promo['currency']['suffix']:
+                    $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix'])
+            ]
+        ];
+
         return $_response;
     }
 
@@ -958,6 +1040,7 @@ class ShopController extends BaseController
         $_basket->setDelivery($_method);
         $_basket_products = $_basket->data;
         $_remove_product = NULL;
+        if($_keys[2] == 'promo_code') $_keys[2] = 0;
         if (isset($_basket_products[$_keys[0]][$_keys[1]][$_keys[2]])) {
             $_remove_product = Product::from('shop_products as p')
                 ->leftJoin('shop_product_prices as sp', 'sp.product_id', '=', 'p.id')
@@ -984,6 +1067,7 @@ class ShopController extends BaseController
         if (isset($_basket_products[$_keys[0]][$_keys[1]]) && !count($_basket_products[$_keys[0]][$_keys[1]])) unset($_basket_products[$_keys[0]][$_keys[1]]);
         if (isset($_basket_products[$_keys[0]]) && !count($_basket_products[$_keys[0]])) unset($_basket_products[$_keys[0]]);
         if (count($_basket_products)) {
+
             $_basket->bSave($_basket_products);
             $_response['commands'][] = [
                 'command' => 'replaceWith',
@@ -992,6 +1076,27 @@ class ShopController extends BaseController
                     'data'   => $_basket->show_checkout_products($_basket)
                 ]
             ];
+
+             /** updating prices in the basket  */
+            $_response['commands'][] = [
+                'command' => 'html',
+                'options' => [
+                    'target' => '#checkout-order-total-amount2 .price-amount',
+                    'data'   => $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix']
+                ]
+            ];
+
+            $_response['commands'][] = [
+                'command' => 'html',
+                'options' => [
+                    'target' => '#checkout-order-total-amount .price-amount',
+                    'data'   => (
+                        !empty($_basket->total_amount_promo['format']['view_price']) ? 
+                        $_basket->total_amount_promo['format']['view_price']. '&nbsp;' . $_basket->total_amount_promo['currency']['suffix']:
+                        $_basket->amount['format']['view_price'] . '&nbsp;' . $_basket->amount['currency']['suffix'])
+                ]
+            ];
+
             /* $_response['commands'][] = [
                  'command' => 'replaceWith',
                  'options' => [
@@ -1322,6 +1427,172 @@ class ShopController extends BaseController
                 'data'   => $_basket->showDeliveryString()
             ]
         ];
+
+        return $_response;
+    }
+    
+    /** checks the promo code */
+    public function ispromocode(Request $request){
+        $_code = $request->input('code');
+        $_val = $request->input('val');
+        //$_item = Stock::whereRaw('lower(code) = ?',mb_strtolower($_code))->where('status',1)->where("date_to",">=",date('Y-m-d'))->first();
+
+        if($_val==1){
+            if(empty($_code)){
+                echo json_encode(array("status"=>false,"mess"=>trans('shop.notifications.not_no_text_promo_code')));
+
+            }else{    
+                $_item = Stock::whereRaw('lower(code) = ?',mb_strtolower($_code))->first();
+
+                if(empty($_item)){
+                    echo json_encode(array("status"=>false,"mess"=>trans('shop.notifications.not_no_promo_code')));
+                
+                }else if(empty($_item->status)){
+                    echo json_encode(array("status"=>false,"mess"=>trans('shop.notifications.not_no_active_promo_code')));
+
+                }else if(empty($_item->date_to >= date('Y-m-d'))){    
+                    echo json_encode(array("status"=>false,"mess"=>trans('shop.notifications.not_no_date_active_promo_code')));
+                    
+                }else{    
+    
+                    $details = json_decode($_item->details,1);
+                    $details['type'] = $_item->type;
+                    $details['date_to'] = $_item->date_to;
+                    $details['title'] = $_item->title;
+                    $details['code'] = $_item->code;
+
+                    Basket::promoCodeSave('promo_code',json_encode($details));
+
+                    echo json_encode(array("status"=>true,"mess"=>trans('shop.notifications.good_active_promo_code')));
+                 }
+            }
+        }else{
+            Basket::promoCodeSave('promo_code','');
+            echo json_encode(array("status"=>false,"mess"=>trans('shop.notifications.good_not_active_promo_code')));
+        }
+    }
+    public function addpromocode(Request $request){
+       
+        $res = json_decode($request->input('data'),1);
+
+        //print_r($res['mess']);
+
+        if(!empty($res['mess'])){
+            $_response['commands'][] = [
+                'command' => 'UK_notification',
+                'options' => [
+                    'text'   => $res['mess'],
+                    'status' => 'danger',
+                ]
+            ];
+        }
+       
+        $basket = Basket::init();
+ 
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#checkout-order-total-amount2 .price-amount',
+                'data'   => $basket->amount['format']['view_price'] . '&nbsp;' . $basket->amount['currency']['suffix']
+            ]
+        ];
+
+        $_response['commands'][] = [
+            'command' => !empty( $basket->total_amount_promo['format']['view_price'])&&!empty($basket->promo_code['type'])&&$basket->promo_code['type']=='all_basket' ? 'removeClass' : 'addClass',
+            'options' => [
+                'target' => '#checkout-order-total-amount2',
+                'data'   => 'uk-hidden'
+            ]
+        ];
+
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#checkout-order-total-amount .price-amount',
+                'data'   => (
+                    !empty($basket->total_amount_promo['format']['view_price']) ? 
+                    $basket->total_amount_promo['format']['view_price']. '&nbsp;' . $basket->total_amount_promo['currency']['suffix']:
+                    $basket->amount['format']['view_price'] . '&nbsp;' . $basket->amount['currency']['suffix'])
+            ]
+        ];
+
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#checkout-order-total-discount .price-amount',
+                'data'   => !empty($basket->promo_code['discount'])&&$basket->promo_code['type']=='all_basket' ? $basket->promo_code['discount']." %": NULL
+            ]
+        ];
+
+
+        $_response['commands'][] = [
+            'command' => !empty($basket->total_amount_promo['format']['view_price'])&&!empty($basket->promo_code['type'])&&$basket->promo_code['type']=='all_basket' ? 'removeClass' : 'addClass',
+            'options' => [
+                'target' => '#checkout-order-total-discount',
+                'data'   => 'uk-hidden'
+            ]
+        ];
+
+        $_response['commands'][] = [
+            'command' => 'html',
+            'options' => [
+                'target' => '#basket-box a span',
+                'data'   => $basket->quantity_in,
+            ]
+        ];
+        
+        $_response['commands'][] = [
+            'command' => 'replaceWith',
+            'options' => [
+                'target' => '#form-checkout-order-products',
+                'data'   => $basket->show_checkout_products($basket)
+            ]
+        ];
+
+        if($res['status']){
+            $_response['commands'][] = [
+                'command' => 'html',
+                'options' => [
+                    'target' => '.btn-submit-promo',
+                    'data'   => trans('forms.buttons.checkout.cancel')
+                ]
+            ];
+            $_response['commands'][] = [
+                'command' => 'val',
+                'options' => [
+                    'target' => '.btn-submit-promo',
+                    'data'   => '0'
+                ]
+            ];
+            $_response['commands'][] = [
+                'command' => 'eval',
+                'options' => [
+                    'data' => '$("#form-checkout-order-stock").attr("disabled","disabled");'
+                ]
+            ];
+        }else{
+            $_response['commands'][] = [
+                'command' => 'html',
+                'options' => [
+                    'target' => '.btn-submit-promo',
+                    'data'   => trans('forms.buttons.checkout.use')
+                ]
+            ];
+            $_response['commands'][] = [
+                'command' => 'val',
+                'options' => [
+                    'target' => '.btn-submit-promo',
+                    'data'   => '1'
+                ]
+            ];
+            $_response['commands'][] = [
+                'command' => 'eval',
+                'options' => [
+                    'data' => '$("#form-checkout-order-stock").removeAttr("disabled");'
+                ]
+            ];
+        }
+        
 
         return $_response;
     }

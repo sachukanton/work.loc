@@ -1,5 +1,4 @@
 <?php
-
     namespace App\Http\Controllers;
 
     use App\Models\Shop\Category;
@@ -13,7 +12,6 @@
 
     class Controller extends BaseController
     {
-
         use AuthorizesRequests,
             DispatchesJobs,
             ValidatesRequests;
@@ -22,7 +20,7 @@
 
         public function __construct()
         {
-            $this->middleware(function (Request $request, $next) {
+           $this->middleware(function (Request $request, $next) {
                 $_wrap = wrap()->_load($request);
                 $_dashboard = $_wrap['page']['is_dashboard'];
                 $this->device = $_wrap['device']['type'];

@@ -132,6 +132,15 @@ Route::post('/certificate', [
     'as'   => 'ajax.shop_certificate',
     'uses' => 'Callback\ShopController@certificate'
 ]);
+// Stock
+Route::post('/stock/addpromocode', [
+    'as'   => 'ajax.stock.addpromocode',
+    'uses' => 'Callback\ShopController@addpromocode'
+]);
+Route::post('/stock/ispromocode', [
+    'as'   => 'ajax.stock.ispromocode',
+    'uses' => 'Callback\ShopController@ispromocode'
+]);
 
 //Route::post('/choiceImg', [
 //    'as'   => 'ajax.choiceImg',

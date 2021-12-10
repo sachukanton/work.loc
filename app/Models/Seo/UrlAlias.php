@@ -66,8 +66,6 @@
                     });
                 }
             }
-
-            return $_response;
         }
 
         public function set()

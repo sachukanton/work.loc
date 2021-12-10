@@ -1,5 +1,4 @@
 <?php
-
     namespace App\Library;
 
     use App\Http\Controllers\Controller;
@@ -7,7 +6,6 @@
 
     abstract class BaseController extends Controller
     {
-
         use Authorizable,
             Dashboards;
 
@@ -22,8 +20,7 @@
         }
 
         public function __call($name, $arguments)
-        {
-            switch ($name) {
+        {   switch ($name) {
                 case 'index':
                     if ($this->__can_permission() == FALSE) abort(403);
                     $_wrap = $this->render([
@@ -46,6 +43,7 @@
                     try {
                         $_item = array_shift($arguments);
                         if ($this->__can_permission('edit') == FALSE) abort(403);
+
                         $_wrap = $this->render([
                             'seo.title' => str_replace([
                                 ':id',
@@ -59,6 +57,7 @@
                                 strip_tags(str_limit($_item->display_name ?? ($_item->full_name ?? $_item->name)))
                             ], $this->titles['edit'])
                         ]);
+
                         $_form = $this->_form($_item);
 
                         return view($_form->theme, compact('_form', '_item', '_wrap'));

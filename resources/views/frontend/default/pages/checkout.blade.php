@@ -25,7 +25,7 @@
                         @endif
                     </div> --}}
 
-                </div>
+               </div>
                 <div class="cart__main--form">
                     <h4>{!! $wrap['page']['title'] !!}</h4>
                     {!! $_item->checkoutFormOutput !!}

@@ -920,7 +920,7 @@ class Router implements RegistrarContract, BindingRegistrar
      * @return void
      */
     public function bind($key, $binder)
-    {
+    {   
         $this->binders[str_replace('-', '_', $key)] = RouteBinding::forCallback(
             $this->container, $binder
         );
@@ -935,7 +935,7 @@ class Router implements RegistrarContract, BindingRegistrar
      * @return void
      */
     public function model($key, $class, Closure $callback = null)
-    {
+    {  
         $this->bind($key, RouteBinding::forModel($this->container, $class, $callback));
     }
 

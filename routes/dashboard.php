@@ -625,14 +625,34 @@ Route::resource('/shop-gifts', 'Shop\GiftController', [
         'create'  => 'oleus.shop_gifts.create',
         'update'  => 'oleus.shop_gifts.update',
         'store'   => 'oleus.shop_gifts.store',
-        'edit'    => 'oleus.shop_gifts.edit',
+        'edit'    => 'oleus.shop_gifts.edit'
     ],
     'except' => [
         'show',
         'destroy'
     ]
 ]);
+
 Route::post('/shop-gifts/product', [
     'as'   => 'oleus.shop_gifts.product',
     'uses' => 'Shop\GiftController@product'
+]);
+
+// Stock
+Route::resource('/shop-stock','Shop\StockController', [
+    'names'  => [
+    'index'   => 'oleus.shop_stock',
+    'create'  => 'oleus.shop_stock.create',
+    'update'  => 'oleus.shop_stock.update',
+    'store'   => 'oleus.shop_stock.store',
+    'edit'    => 'oleus.shop_stock.edit'
+    ],
+    'except' => [
+        'show',
+        'destroy'
+    ]
+]);
+Route::get('/shop-stock/getproducts/{category?}', [
+    'as'   => 'oleus.shop_stock.getproducts',
+    'uses' => 'Shop\StockController@getproducts'
 ]);

@@ -225,6 +225,11 @@ return [
                     'permission' => 'shop_products_read'
                 ],
                 [
+                    'link'       => 'Промо коды',
+                    'route'      => 'oleus.shop_stock',
+                    'permission' => 'shop_products_read'
+                ],
+                [
                     'link'       => 'Данные форм',
                     'route'      => 'oleus.shop_forms_data',
                     'permission' => 'shop_form_data_read'

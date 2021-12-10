@@ -23,6 +23,7 @@ use App\Models\Shop\Category;
 use App\Models\Shop\FilterPage;
 use App\Models\Shop\Form;
 use App\Models\Shop\Gift;
+use App\Models\Shop\Stock;
 use App\Models\Shop\Order;
 use App\Models\Shop\Param;
 use App\Models\Shop\ParamItem;
@@ -48,6 +49,7 @@ class RouteServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        parent::boot();
         //            Route::domain('https://yummy-king.com.ua');
         Route::pattern('id', '[0-9]+');
         Route::pattern('key', '[0-9a-zA-Z]+');
@@ -79,6 +81,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('shop_order', Order::class);
         Route::model('shop_price', Price::class);
         Route::model('shop_gift', Gift::class);
+        Route::model('shop_stock', Stock::class);    
         Route::model('form', Forms::class);
         Route::model('forms_datum', FormsData::class);
         Route::model('url_alias', UrlAlias::class);
@@ -87,7 +90,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('pharm_pharmacy', PharmPharmacy::class);
         Route::model('modal_banner', ModalBanner::class);
         Route::model('additional_item', AdditionalItem::class);
-        parent::boot();
+       
     }
 
     public function map()

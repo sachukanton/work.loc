@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Dashboard\Shop;
 
 use App\Library\BaseController;
@@ -13,10 +12,10 @@ use Illuminate\Support\Facades\Session;
 
 class GiftController extends BaseController
 {
-
     public function __construct()
     {
         parent::__construct();
+
         $this->titles = [
             'index'     => 'Список Подарков',
             'create'    => 'Добавить подарок',
